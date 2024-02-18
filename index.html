@@ -55,11 +55,94 @@
 
 <script>
 function calculatePoisson() {
-  // Poisson Distribution calculation logic here
+  const k = parseInt(document.getElementById("k").value);
+  const lamda = parseFloat(document.getElementById("lamda").value);
+  const probabilityType = parseInt(document.getElementById("probabilityType").value);
+  let P = 0;
+
+  if (probabilityType === 1) {
+    P = (Math.exp(-1 * lamda) * Math.pow(lamda, k)) / factorial(k);
+    document.getElementById("poissonResult").innerHTML = `P(X = ${k}) = ${P.toFixed(4)}`;
+  } else if (probabilityType === 2) {
+    for (let i = 0; i < k; i++) {
+      P += (Math.exp(-1 * lamda) * Math.pow(lamda, i)) / factorial(i);
+    }
+    document.getElementById("poissonResult").innerHTML = `P(X &lt; ${k}) = ${P.toFixed(4)}`;
+  } else if (probabilityType === 3) {
+    for (let i = 0; i <= k; i++) {
+      P += (Math.exp(-1 * lamda) * Math.pow(lamda, i)) / factorial(i);
+    }
+    document.getElementById("poissonResult").innerHTML = `P(X ≤ ${k}) = ${P.toFixed(4)}`;
+  } else if (probabilityType === 4) {
+    for (let i = 0; i <= k; i++) {
+      P += (Math.exp(-1 * lamda) * Math.pow(lamda, i)) / factorial(i);
+    }
+    const PT = 1 - P;
+    document.getElementById("poissonResult").innerHTML = `P(X &gt; ${k}) = ${PT.toFixed(4)}`;
+  } else if (probabilityType === 5) {
+    for (let i = 0; i < k; i++) {
+      P += (Math.exp(-1 * lamda) * Math.pow(lamda, i)) / factorial(i);
+    }
+    const PR = 1 - P;
+    document.getElementById("poissonResult").innerHTML = `P(X ≥ ${k}) = ${PR.toFixed(4)}`;
+  }
+}
+
+function factorial(n) {
+  if (n === 0 || n === 1) {
+    return 1;
+  }
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
 }
 
 function calculateBinomial() {
-  // Binomial Distribution calculation logic here
+  const p = parseFloat(document.getElementById("p").value);
+  const n = parseInt(document.getElementById("n").value);
+  const k = parseInt(document.getElementById("kBinomial").value);
+  const probabilityType = parseInt(document.getElementById("probabilityTypeBinomial").value);
+  let PF = 0;
+
+  if (probabilityType === 1) {
+    PF = (binomialCoefficient(n, k) * Math.pow(p, k) * Math.pow(1 - p, n - k)).toFixed(4);
+    document.getElementById("binomialResult").innerHTML = `P(X = ${k}) = ${PF}`;
+  } else if (probabilityType === 2) {
+    for (let i = 0; i < k; i++) {
+      PF += (binomialCoefficient(n, i) * Math.pow(p, i) * Math.pow(1 - p, n - i));
+    }
+    document.getElementById("binomialResult").innerHTML = `P(X &lt; ${k}) = ${PF.toFixed(4)}`;
+  } else if (probabilityType === 3) {
+    for (let i = 0; i <= k; i++) {
+      PF += (binomialCoefficient(n, i) * Math.pow(p, i) * Math.pow(1 - p, n - i));
+    }
+    document.getElementById("binomialResult").innerHTML = `P(X ≤ ${k}) = ${PF.toFixed(4)}`;
+  } else if (probabilityType === 4) {
+    for (let i = 0; i <= k; i++) {
+      PF += (binomialCoefficient(n, i) * Math.pow(p, i) * Math.pow(1 - p, n - i));
+    }
+    const PF2 = 1 - PF;
+    document.getElementById("binomialResult").innerHTML = `P(X &gt; ${k}) = ${PF2.toFixed(4)}`;
+  } else if (probabilityType === 5) {
+    for (let i = 0; i < k; i++) {
+      PF += (binomialCoefficient(n, i) * Math.pow(p, i) * Math.pow(1 - p, n - i));
+    }
+    const PF2 = 1 - PF;
+    document.getElementById("binomialResult").innerHTML = `P(X ≥ ${k}) = ${PF2.toFixed(4)}`;
+  }
+}
+
+function binomialCoefficient(n, k) {
+  let coeff = 1;
+  for (let i = n - k + 1; i <= n; i++) {
+    coeff *= i;
+  }
+  for (let i = 1; i <= k; i++) {
+    coeff /= i;
+  }
+  return coeff;
 }
 </script>
 </body>
