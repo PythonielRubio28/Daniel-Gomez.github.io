@@ -1,42 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poisson Probability Calculator</title>
-    <script>
-        function calculateProbability() {
-            var valor = parseFloat(document.getElementById("valorInput").value);
-            var lamda = parseFloat(document.getElementById("lamdaInput").value);
-
-            var p = (Math.exp(-1 * lamda) * Math.pow(lamda, valor)) / factorial(valor);
-
-            document.getElementById("result").innerHTML = `La probabilidad de P(x = ${valor}) = ${p}`;
-        }
-
-        // Function to calculate factorial
-        function factorial(n) {
-            if (n === 0 || n === 1)
-                return 1;
-            else {
-                for (var i = n - 1; i >= 1; i--) {
-                    n *= i;
-                }
-                return n;
-            }
-        }
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poisson Distribution Calculator</title>
 </head>
 <body>
-    <h1>Poisson Probability Calculator</h1>
-    <label for="valorInput">Escoja el valor de k:</label>
-    <input type="number" id="valorInput"><br><br>
+<h2>Poisson Distribution Calculator</h2>
+<form id="poissonForm">
+  <label for="k">Value of k:</label>
+  <input type="number" id="k" name="k" required><br><br>
+  
+  <label for="lamda">Value of lambda (λ):</label>
+  <input type="number" id="lamda" name="lamda" required><br><br>
+  
+  <label for="probabilityType">Choose a probability type:</label>
+  <select id="probabilityType" name="probabilityType">
+    <option value="1">P(X=x)</option>
+    <option value="2">P(X&lt;x)</option>
+    <option value="3">P(X≤x)</option>
+    <option value="4">P(X&gt;x)</option>
+    <option value="5">P(X≥x)</option>
+  </select><br><br>
+  
+  <button type="button" onclick="calculateProbability()">Calculate</button>
+</form>
 
-    <label for="lamdaInput">Introduzca el valor de lamda:</label>
-    <input type="number" id="lamdaInput"><br><br>
+<p id="result"></p>
 
-    <button onclick="calculateProbability()">Calcular Probabilidad</button><br><br>
+<script>
+function calculateProbability() {
+  const k = parseInt(document.getElementById("k").value);
+  const lamda = parseFloat(document.getElementById("lamda").value);
+  const probabilityType = parseInt(document.getElementById("probabilityType").value);
+  let P = 0;
 
-    <div id="result"></div>
+  if (probabilityType === 1) {
+    P = (Math.exp(-1 * lamda) * Math.pow(lamda, k)) / factorial(k);
+    document.getElementById("result").innerHTML = `The probability of P(X = ${k}) = ${P.toFixed(4)}`;
+  } else if (probabilityType === 2) {
+    for (let i = 0; i < k; i++) {
+      P += (Math.exp(-1 * lamda) * Math.pow(lamda, i)) / factorial(i);
+    }
+    document.getElementById("result").innerHTML = `The probability of P(X &lt; ${k}) = ${P.toFixed(4)}`;
+  } else if (probabilityType === 3) {
+    for (let i = 0; i <= k; i++) {
+      P += (Math.exp(-1 * lamda) * Math.pow(lamda, i)) / factorial(i);
+    }
+    document.getElementById("result").innerHTML = `The probability of P(X ≤ ${k}) = ${P.toFixed(4)}`;
+  } else if (probabilityType === 4) {
+    for (let i = 0; i <= k; i++) {
+      P += (Math.exp(-1 * lamda) * Math.pow(lamda, i)) / factorial(i);
+    }
+    const PT = 1 - P;
+    document.getElementById("result").innerHTML = `The probability of P(X &gt; ${k}) = ${PT.toFixed(4)}`;
+  } else if (probabilityType === 5) {
+    for (let i = 0; i < k; i++) {
+      P += (Math.exp(-1 * lamda) * Math.pow(lamda, i)) / factorial(i);
+    }
+    const PR = 1 - P;
+    document.getElementById("result").innerHTML = `The probability of P(X ≥ ${k}) = ${PR.toFixed(4)}`;
+  }
+}
+
+function factorial(n) {
+  if (n === 0 || n === 1) {
+    return 1;
+  }
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
+</script>
 </body>
 </html>
